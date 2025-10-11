@@ -1,4 +1,13 @@
 services:
+  backend:
+    build: 
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+        - node_modules_backend:/app/node_modules
+        - ./api:/app
   frontend:
     build: 
       context: ./client
@@ -10,3 +19,4 @@ services:
         - ./client:/app
 volumes:
   node_modules_frontend:
+  node_modules_backend:
