@@ -1,0 +1,12 @@
+services:
+  frontend:
+    build: 
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    volumes:
+        - node_modules_frontend:/app/node_modules
+        - ./client:/app
+volumes:
+  node_modules_frontend:
