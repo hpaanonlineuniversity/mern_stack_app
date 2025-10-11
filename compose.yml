@@ -8,6 +8,23 @@ services:
     volumes:
         - node_modules_backend:/app/node_modules
         - ./api:/app
+    env_file:
+      - .env
+    environment:
+      - MONGO_DBNAME=${MONGO_DBNAME}
+      - MONGO_HOST=${MONGO_HOST}
+      - MONGO_PORT=${MONGO_PORT}
+      - MONGO_USER=${MONGO_USER}
+      - MONGO_PASSWORD=${MONGO_PASSWORD}
+
+  mongodb:
+    image: mongo:noble
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    volumes:
+      - mongo-data:/data/db
+
   frontend:
     build: 
       context: ./client
@@ -20,3 +37,4 @@ services:
 volumes:
   node_modules_frontend:
   node_modules_backend:
+  mongo-data:
