@@ -1,8 +1,19 @@
 import express from 'express'
-import connectDB from './config/db.js';
+import connectDB from './configs/db.js';
+import userRoutes from './routes/user_route.js'
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+
+
+
+// Body parser middleware ထည့်ပါ
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+
+app.use('/auth', userRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello World!!');
@@ -22,3 +33,4 @@ connectDB().then(() => {
   console.error('Database connection failed:', err);
   process.exit(1); // Exit process with failure
 });
+
