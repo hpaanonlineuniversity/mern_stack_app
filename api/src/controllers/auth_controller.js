@@ -2,7 +2,7 @@ import userModel from '../models/user_model.js'
 import bcrypt from 'bcryptjs';
 
 // User registration
-export async function register(req, res) {
+export async function register(req, res,next) {
     try {
         const { username, email, password } = req.body;
 
@@ -25,7 +25,8 @@ export async function register(req, res) {
         await newUser.save();
         res.status(201).json({ message: "User registered successfully" });
     } catch (error) {
-        console.error("Registration error:",error.message)
-        res.status(500).json({ message: "Error registering user", error: error.message });
+        //console.error("Registration error:",error.message)
+        //res.status(500).json({ message: "Error registering user", error: error.message });
+        next(error);
     }
 }
