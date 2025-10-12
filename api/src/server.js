@@ -1,7 +1,7 @@
 import express from 'express'
 import connectDB from './configs/db.js';
 import userRoutes from './routes/user_route.js'
-import errorHandler from './middlewares/errorMiddleware.js';
+import mid_errorHandler from './middlewares/errorMiddleware.js';
 
 import cors from 'cors';
 
@@ -54,7 +54,7 @@ connectDB().then(() => {
 
 
 app.use('/api/auth', userRoutes);
-app.use(errorHandler);
+app.use(mid_errorHandler);
 
 
 
