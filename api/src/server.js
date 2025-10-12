@@ -3,6 +3,22 @@ import connectDB from './configs/db.js';
 import userRoutes from './routes/user_route.js'
 import errorHandler from './middlewares/errorMiddleware.js';
 
+import cors from 'cors';
+
+// Enable CORS for all routes
+
+const corsOptions = {
+  // origin: '*', //allow All origins
+  origin: "*",
+  Credentials: true, // enable set cookies from browser to pass through
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], //allowed methods
+  allowedHeaders: ['Content-Type', 'Authorization'], //allowed headers
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  
+
+};
+
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -13,7 +29,7 @@ const PORT = process.env.PORT || 3000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
+app.use(cors(corsOptions));
 
 
 app.get('/', (req, res) => {
