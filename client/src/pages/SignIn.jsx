@@ -1,12 +1,19 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
+import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSlice.js'; //redux
+import { useDispatch, useSelector } from 'react-redux'; //redux
 
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
-  const [error, setError] = useState(false);
-  const [loading, setLoading] = useState(false);
+  //const [error, setError] = useState(false);
+  //const [loading, setLoading] = useState(false);
+  const { loading, error } = useSelector((state) => state.user);
+
+
   const navigate = useNavigate();
+  const dispatch = useDispatch(); //redux
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
@@ -20,8 +27,13 @@ export default function SignIn() {
 
 
     try {
-      setLoading(true);
-      setError(false);
+      
+      //setLoading(true);
+      //setError(false);
+
+      dispatch(signInStart()); //redux
+
+
       const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: 'POST',
         headers: {
@@ -30,16 +42,26 @@ export default function SignIn() {
         body: JSON.stringify(formData),
       });
       const data = await res.json();
-      console.log(data);
-      setLoading(false);
-      if (data.success === false) {
-        setError(true);
-        return;
-      }
+      //console.log(data);
+
+        // ဒီမှာ သေချာ console.log ထည့်ကြည့်ပါ
+      console.log('Backend Response:', data);
+
+       // မတူညီတဲ့ condition များစစ်ဆေးပါ
+    if (data.success === false || data.message || !res.ok) {
+      dispatch(signInFailure(data));
+      return;
+    }
+
+
+      //setLoading(false);
+      dispatch(signInSuccess(data)); //redux
       navigate('/');
+
     } catch (error) {
-      setLoading(false);
-      setError(true);
+      //setLoading(false);
+      //setError(true);
+      dispatch(signInFailure(error));
     }
   };
   return (
@@ -74,7 +96,7 @@ export default function SignIn() {
           <span className='text-blue-500'>Sign up</span>
         </Link>
       </div>
-      <p className='text-red-700 mt-5'>{error && 'Something went wrong!'}</p>
+      <p className='text-red-700 mt-5'>{ error ? error.message || 'Something went wrong!' : "" }</p>
     </div>
   );
 }
