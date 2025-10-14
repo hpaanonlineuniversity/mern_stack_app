@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router';
-import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSlice.js'; //redux
+import { signInStart, signInSuccess, signInFailure, clearError } from '../redux/user/userSlice.js'; //redux
 import { useDispatch, useSelector } from 'react-redux'; //redux
 
 
@@ -13,6 +13,11 @@ export default function SignIn() {
 
   const navigate = useNavigate();
   const dispatch = useDispatch(); //redux
+
+   // Component mount ဖြစ်တိုင်း error ကို clear လုပ်မယ်
+  useEffect(() => {
+    dispatch(clearError());
+  }, [dispatch]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });

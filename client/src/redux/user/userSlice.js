@@ -10,6 +10,9 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
+    clearError: (state) => {
+      state.error = null; // error ကို clear လုပ်မယ်
+    },
     signInStart: (state) => {
       state.loading = true;
     },
@@ -60,6 +63,7 @@ export const {
   signInStart,
   signInSuccess,
   signInFailure,
+  clearError,
   /*
   updateUserFailure,
   updateUserStart,
