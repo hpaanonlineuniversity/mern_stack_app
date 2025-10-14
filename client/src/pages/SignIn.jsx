@@ -47,8 +47,8 @@ export default function SignIn() {
         // ဒီမှာ သေချာ console.log ထည့်ကြည့်ပါ
       console.log('Backend Response:', data);
 
-       // မတူညီတဲ့ condition များစစ်ဆေးပါ
-    if (data.success === false || data.message || !res.ok) {
+    if (!res.ok || data.success === false) 
+    {
       dispatch(signInFailure(data));
       return;
     }
