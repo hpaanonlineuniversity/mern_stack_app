@@ -72,3 +72,58 @@ export async function login(req, res,next) {
         next(error);
     }
 };
+
+export const google = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ email: req.body.email });
+    if (user) {
+
+        // Create a JWT token
+         const token = jwt.sign({ userId: user._id },JWT_SECRET,{expiresIn: "1h"});
+
+         const {password: hashedPassword, ...rest} = user._doc;
+
+        //res.status(200).json({ token });
+        res
+            .cookie('access_token', token, {httpOnly: true })
+            .status(200)
+            .json(rest);
+      
+    } else {
+      const generatedPassword =
+        Math.random().toString(36).slice(-8) +
+        Math.random().toString(36).slice(-8);
+
+        const newhashedPassword = await bcrypt.hash(password, 10);
+
+      const newUser = new userModel({
+        username:
+          req.body.name.split(' ').join('').toLowerCase() +
+          Math.random().toString(36).slice(-8),
+        email: req.body.email,
+        password: newhashedPassword,
+        profilePicture: req.body.photo,
+      });
+
+      await newUser.save();
+
+      // Create a JWT token
+         const token = jwt.sign({ userId: user._id },JWT_SECRET,{expiresIn: "1h"});
+
+         const {password: hashedPassword, ...rest} = user._doc;
+
+        //res.status(200).json({ token });
+        res
+            .cookie('access_token', token, {httpOnly: true })
+            .status(200)
+            .json(rest);
+
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const signout = (req, res) => {
+  res.clearCookie('access_token').status(200).json('Signout success!');
+};
