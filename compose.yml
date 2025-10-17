@@ -35,6 +35,11 @@ services:
     volumes:
         - node_modules_frontend:/app/node_modules
         - ./client:/app
+    env_file:
+      - .env
+    environment:
+      - VITE_SUPABASE_URL=${VITE_SUPABASE_URL}
+      - VITE_SUPABASE_KEY=${VITE_SUPABASE_KEY}
 volumes:
   node_modules_frontend:
   node_modules_backend:
