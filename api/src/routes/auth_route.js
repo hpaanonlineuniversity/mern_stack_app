@@ -1,4 +1,4 @@
-import { register,login, google, signout } from '../controllers/auth_controller.js';
+import { register,login, github, signout } from '../controllers/auth_controller.js';
 import express from 'express';
 
 const router = express.Router();
@@ -9,7 +9,7 @@ router.post('/register',register);
 // User login
 router.post('/login',login);
 
-router.post('/google', google);
+router.post('/github', github);
 
 router.get('/signout', signout);
 

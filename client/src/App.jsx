@@ -5,6 +5,7 @@ import Profile from './pages/Profile'
 import SignIn from './pages/SignIn'
 import SignUp from './pages/SignUp'
 import Header from './components/Header'
+import Callback from './pages/Callback'
 
 //hello
 const App = () => {
@@ -19,6 +20,7 @@ const App = () => {
         <Route path='/profile' element={<Profile/>} />
         <Route path='/sign-in' element={<SignIn/>} />
         <Route path='/sign-up' element={<SignUp/>} />
+        <Route path='/auth/callback' element={<Callback/>} />
     </Routes>
   </BrowserRouter>
   );

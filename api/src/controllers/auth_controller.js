@@ -73,9 +73,9 @@ export async function login(req, res,next) {
     }
 };
 
-export const google = async (req, res, next) => {
+export const github = async (req, res, next) => {
   try {
-    const user = await User.findOne({ email: req.body.email });
+    const user = await userModel.findOne({ email: req.body.email });
     if (user) {
 
         // Create a JWT token
@@ -94,7 +94,7 @@ export const google = async (req, res, next) => {
         Math.random().toString(36).slice(-8) +
         Math.random().toString(36).slice(-8);
 
-        const newhashedPassword = await bcrypt.hash(password, 10);
+        const newhashedPassword = await bcrypt.hash(generatedPassword, 10);
 
       const newUser = new userModel({
         username:
@@ -108,7 +108,7 @@ export const google = async (req, res, next) => {
       await newUser.save();
 
       // Create a JWT token
-         const token = jwt.sign({ userId: user._id },JWT_SECRET,{expiresIn: "1h"});
+         const token = jwt.sign({ userId: newUser._id },JWT_SECRET,{expiresIn: "1h"});
 
          const {password: hashedPassword, ...rest} = user._doc;
 
