@@ -5,14 +5,19 @@ import { JWT_SECRET } from '../configs/config.js'
 import { errorHandler } from '../utils/error.js'
 
 // User registration
-export async function register(req, res,next) {
+export async function register(req, res, next) {
     try {
         const { username, email, password } = req.body;
+
+        // Validate required fields
+        if (!username || !email || !password) {
+            return next(errorHandler(400, "All fields (username, email, password) are required"));
+        }
 
         // Check if user already exists
         const existingUser = await userModel.findOne({ email });
         if (existingUser) {
-            return res.status(400).json({ message: "User already exists" });
+            return next(errorHandler(400, "User already exists"));
         }
 
         // Hash the password
@@ -28,102 +33,99 @@ export async function register(req, res,next) {
         await newUser.save();
         res.status(201).json({ message: "User registered successfully" });
     } catch (error) {
-        //console.error("Registration error:",error.message)
-        //res.status(500).json({ message: "Error registering user", error: error.message });
-        next(error);
+        next(errorHandler(500, `Registration failed: ${error.message}`));
     }
 }
 
 // User login
-export async function login(req, res,next) {
+export async function login(req, res, next) {
     try {
         const { email, password } = req.body;
 
+        // Validate required fields
+        if (!email || !password) {
+            return next(errorHandler(400, "Email and password are required"));
+        }
+
         // Find the user by email
         const user = await userModel.findOne({ email });
-        
-        /*
         if (!user) {
-            return res.status(400).json({ message: "Invalid email or password" });
-        }*/
-        if (!user) return next(errorHandler(400,"Invalid email or password"));
-
-
+            return next(errorHandler(400, "Invalid email or password"));
+        }
 
         // Compare the password
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(400).json({ message: "Invalid email or password" });
+            return next(errorHandler(400, "Invalid email or password"));
         }
 
-
         // Create a JWT token
-         const token = jwt.sign({ userId: user._id },JWT_SECRET,{expiresIn: "1h"});
+        const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: "1h" });
 
-         const {password: hashedPassword, ...rest} = user._doc;
+        const { password: hashedPassword, ...rest } = user._doc;
 
-        //res.status(200).json({ token });
         res
-            .cookie('access_token', token, {httpOnly: true })
+            .cookie('access_token', token, { httpOnly: true })
             .status(200)
             .json(rest);
 
     } catch (error) {
-        next(error);
+        next(errorHandler(500, `Login failed: ${error.message}`));
     }
 };
 
 export const github = async (req, res, next) => {
-  try {
-    const user = await userModel.findOne({ email: req.body.email });
-    if (user) {
+    try {
+        const { email, name, photo } = req.body;
 
-        // Create a JWT token
-         const token = jwt.sign({ userId: user._id },JWT_SECRET,{expiresIn: "1h"});
+        // Validate required fields
+        if (!email) {
+            return next(errorHandler(400, "Email is required for GitHub authentication"));
+        }
 
-         const {password: hashedPassword, ...rest} = user._doc;
+        const user = await userModel.findOne({ email });
+        if (user) {
+            const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: "1h" });
+            const { password: hashedPassword, ...rest } = user._doc;
 
-        //res.status(200).json({ token });
-        res
-            .cookie('access_token', token, {httpOnly: true })
-            .status(200)
-            .json(rest);
-      
-    } else {
-      const generatedPassword =
-        Math.random().toString(36).slice(-8) +
-        Math.random().toString(36).slice(-8);
+            res
+                .cookie('access_token', token, { httpOnly: true })
+                .status(200)
+                .json(rest);
+        } else {
+            if (!name) {
+                return next(errorHandler(400, "Name is required for new GitHub users"));
+            }
 
-        const newhashedPassword = await bcrypt.hash(generatedPassword, 10);
+            const generatedPassword = Math.random().toString(36).slice(-8) + Math.random().toString(36).slice(-8);
+            const newhashedPassword = await bcrypt.hash(generatedPassword, 10);
 
-      const newUser = new userModel({
-        username:
-          req.body.name.split(' ').join('').toLowerCase() +
-          Math.random().toString(36).slice(-8),
-        email: req.body.email,
-        password: newhashedPassword,
-        profilePicture: req.body.photo,
-      });
+            const newUser = new userModel({
+                username: name.split(' ').join('').toLowerCase() + Math.random().toString(36).slice(-8),
+                email: email,
+                password: newhashedPassword,
+                profilePicture: photo,
+            });
 
-      await newUser.save();
+            await newUser.save();
 
-      // Create a JWT token
-         const token = jwt.sign({ userId: newUser._id },JWT_SECRET,{expiresIn: "1h"});
+            const token = jwt.sign({ userId: newUser._id }, JWT_SECRET, { expiresIn: "1h" });
+            const { password: hashedPassword2, ...rest } = newUser._doc;
 
-         const {password: hashedPassword, ...rest} = user._doc;
-
-        //res.status(200).json({ token });
-        res
-            .cookie('access_token', token, {httpOnly: true })
-            .status(200)
-            .json(rest);
-
+            res
+                .cookie('access_token', token, { httpOnly: true })
+                .status(200)
+                .json(rest);
+        }
+    } catch (error) {
+        next(errorHandler(500, `GitHub authentication failed: ${error.message}`));
     }
-  } catch (error) {
-    next(error);
-  }
 };
 
-export const signout = (req, res) => {
-  res.clearCookie('access_token').status(200).json('Signout success!');
+export const signout = (req, res, next) => {
+    try {
+        res.clearCookie('access_token').status(200).json('Signout success!');
+    } catch (error) {
+        next(errorHandler(500, `Signout failed: ${error.message}`));
+    }
 };

@@ -45,7 +45,7 @@ export default function Callback() {
       });
       
       const data = await res.json();
-      console.log(data);
+      console.log("checking data : ",data);
       dispatch(signInSuccess(data));
       navigate('/');
       }
