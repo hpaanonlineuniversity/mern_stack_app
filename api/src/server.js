@@ -12,7 +12,7 @@ import cors from 'cors';
 const corsOptions = {
   // origin: '*', //allow All origins
   origin: "*",
-  Credentials: true, // enable set cookies from browser to pass through
+  credentials: true, // enable set cookies from browser to pass through
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], //allowed methods
   allowedHeaders: ['Content-Type', 'Authorization'], //allowed headers
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
