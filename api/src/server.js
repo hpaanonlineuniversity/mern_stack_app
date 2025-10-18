@@ -1,7 +1,9 @@
 import express from 'express'
 import connectDB from './configs/db.js';
 import authRoutes from './routes/auth_route.js'
+import userRoutes from './routes/user_route.js';
 import mid_errorHandler from './middlewares/errorMiddleware.js';
+import cookieParser from 'cookie-parser';
 
 import cors from 'cors';
 
@@ -24,6 +26,8 @@ const corsOptions = {
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+app.use(cookieParser());
 
 // Body parser middleware ထည့်ပါ
 app.use(express.json());
@@ -52,6 +56,7 @@ connectDB().then(() => {
 
 
 app.use('/api/auth', authRoutes);
+app.use('/api/user', userRoutes);
 app.use(mid_errorHandler);
 
 
