@@ -1,14 +1,23 @@
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux'; //redux
 import { useRef, useState, useEffect } from 'react';
+import { updateUserFailure, updateUserSuccess } from '../redux/user/userSlice.js'; //redux
 
 
 export default function Profile() {
+
+
+     const API_BASE_URL = import.meta.env.DEV 
+  ? 'http://localhost:3000'  // Browser ကနေခေါ်ရင်
+  : 'http://backend:3000';    // Docker container ထဲကခေါ်ရင်
+
+
 
   const { currentUser, loading } = useSelector((state) => state.user);
   const [image, setImage] = useState(undefined);
   const [localProfilePic, setLocalProfilePic] = useState(currentUser.profilePicture);
   const fileRef = useRef(null);
   const [formData, setFormData] = useState({});
+  const dispatch = useDispatch(); //redux
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -82,6 +91,34 @@ export default function Profile() {
     }
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      //dispatch(updateUserStart());
+      const res = await fetch(`${API_BASE_URL}/api/user/update/${currentUser._id}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(formData),
+      });
+      const data = await res.json();
+      console.log(data);
+      /*
+      if (data.success === false) {
+        dispatch(updateUserFailure(data));
+        return;
+      }
+      dispatch(updateUserSuccess(data));
+      setUpdateSuccess(true);
+      */
+    } catch (error) {
+      console.log("error",error);
+      //dispatch(updateUserFailure(error));
+    }
+  };
+
   // Local storage ကိုရှင်းတဲ့ function (လိုအပ်ရင်သုံးမယ်)
   const clearProfilePicture = () => {
     localStorage.removeItem('profilePicture');
@@ -92,7 +129,7 @@ export default function Profile() {
   return (
     <div className='p-3 max-w-lg mx-auto'>
       <h1 className='text-3xl font-semibold text-center my-7'>Profile</h1>
-      <form className='flex flex-col gap-4'>
+      <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
         <input
           type='file'
           ref={fileRef}

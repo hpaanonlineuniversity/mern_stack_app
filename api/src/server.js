@@ -10,33 +10,46 @@ import cors from 'cors';
 // Enable CORS for all routes
 
 const corsOptions = {
-  // origin: '*', // can not using * with credentials : true
-  origin: [
-  'http://localhost:5173',
-  'http://frontend:5173'
-
+  origin: (origin, callback) => {
+    const allowedOrigins = [
+      'http://localhost:5173',
+      'http://127.0.0.1:5173', 
+      'http://frontend:5173',
+    ];
+    
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true, // ✅ ဒါအရေးကြီးတယ်
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: [
+    'Content-Type', 
+    'Authorization', 
+    'X-Requested-With',
+    'Cookie' // ✅ ဒါထည့်ကြည့်ပါ
   ],
-  credentials: true, // enable set cookies from browser to pass through
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], //allowed methods
-  allowedHeaders: ['Content-Type', 'Authorization'], //allowed headers
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-  
-
+  exposedHeaders: ['Set-Cookie'], // ✅ ဒါလည်းထည့်ပါ
+  optionsSuccessStatus: 200
 };
 
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cookieParser());
+//CORS middleware
+app.use(cors(corsOptions));
 
 // Body parser middleware ထည့်ပါ
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-//CORS middleware
-app.use(cors(corsOptions));
+app.use(cookieParser());
+
+
 
 
 app.get('/', (req, res) => {
