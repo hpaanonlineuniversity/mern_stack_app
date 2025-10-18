@@ -10,8 +10,12 @@ import cors from 'cors';
 // Enable CORS for all routes
 
 const corsOptions = {
-  // origin: '*', //allow All origins
-  origin: "*",
+  // origin: '*', // can not using * with credentials : true
+  origin: [
+  'http://localhost:5173',
+  'http://frontend:5173'
+
+  ],
   credentials: true, // enable set cookies from browser to pass through
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'], //allowed methods
   allowedHeaders: ['Content-Type', 'Authorization'], //allowed headers
@@ -19,9 +23,6 @@ const corsOptions = {
   
 
 };
-
-
-
 
 
 const app = express();
