@@ -64,8 +64,13 @@ export async function login(req, res, next) {
 
         const { password: hashedPassword, ...rest } = user._doc;
 
-        res
-            .cookie('access_token', token, { httpOnly: true })
+         res
+            .cookie('mern_access_token', token, {
+                httpOnly: true,
+                path: '/',
+                secure: false,
+                sameSite: 'none'
+            })
             .status(200)
             .json(rest);
 
@@ -89,7 +94,12 @@ export const github = async (req, res, next) => {
             const { password: hashedPassword, ...rest } = user._doc;
 
             res
-                .cookie('access_token', token, { httpOnly: true })
+                .cookie('mern_access_token', token, {
+                    httpOnly: true,
+                    path: '/',
+                    secure: false,
+                    sameSite: 'none'
+                })
                 .status(200)
                 .json(rest);
         } else {
@@ -113,7 +123,12 @@ export const github = async (req, res, next) => {
             const { password: hashedPassword2, ...rest } = newUser._doc;
 
             res
-                .cookie('access_token', token, { httpOnly: true })
+                .cookie('mern_access_token', token, {
+                    httpOnly: true,
+                    path: '/',
+                    secure: false,
+                    sameSite: 'none'
+                })
                 .status(200)
                 .json(rest);
         }
@@ -124,7 +139,7 @@ export const github = async (req, res, next) => {
 
 export const signout = (req, res, next) => {
     try {
-        res.clearCookie('access_token').status(200).json('Signout success!');
+        res.clearCookie('mern_access_token').status(200).json('Signout success!');
     } catch (error) {
         next(errorHandler(500, `Signout failed: ${error.message}`));
     }
