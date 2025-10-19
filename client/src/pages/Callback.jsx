@@ -37,6 +37,7 @@ export default function Callback() {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify({
           name: userData.name,
           email: userData.email,
