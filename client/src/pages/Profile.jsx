@@ -103,6 +103,11 @@ export default function Profile() {
         credentials: 'include',
         body: JSON.stringify(formData),
       });
+
+    // Response headers ကြည့်ကြည့်ပါ
+    console.log('Response headers:', res.headers);
+
+
       const data = await res.json();
       console.log(data);
       /*

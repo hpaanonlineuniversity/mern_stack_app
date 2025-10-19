@@ -69,7 +69,9 @@ export async function login(req, res, next) {
                 httpOnly: true,
                 path: '/',
                 secure: false,
-                sameSite: 'none'
+                sameSite: 'lax',
+                maxAge: 24 * 60 * 60 * 1000,
+                domain: 'localhost',
             })
             .status(200)
             .json(rest);
