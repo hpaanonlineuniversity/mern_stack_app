@@ -43,8 +43,13 @@ const PORT = process.env.PORT || 3000;
 app.use(cors(corsOptions));
 
 // Body parser middleware ထည့်ပါ
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+//app.use(express.json());
+//app.use(express.urlencoded({ extended: true }));
+
+// JSON payload limit တိုးပါ
+app.use(express.json({ limit: '10mb' })); // Default: 100kb
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
 
 
 app.use(cookieParser());
@@ -71,6 +76,9 @@ connectDB().then(() => {
 
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
+
+
+
 app.use(mid_errorHandler);
 
 

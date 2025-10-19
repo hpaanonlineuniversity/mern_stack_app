@@ -30,6 +30,16 @@ export default function Profile() {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   }
 
+  // Profile picture ကို form data ထဲထည့်ဖို့ function အသစ်ထည့်ပါ
+  const updateFormDataWithProfilePic = (profilePic) => {
+    if (profilePic) {
+      setFormData(prevFormData => ({
+        ...prevFormData,
+        profilePicture: profilePic
+      }));
+    }
+  };
+
    useEffect(() => {
     if (image) {
       handleFileUpload(image);
@@ -41,6 +51,10 @@ export default function Profile() {
     const savedProfilePic = localStorage.getItem('profilePicture');
     if (savedProfilePic) {
       setLocalProfilePic(savedProfilePic);
+
+      // Form data ထဲကိုလည်း ထည့်ပါ
+    updateFormDataWithProfilePic(savedProfilePic);
+
     }
   }, []);
 
@@ -75,6 +89,9 @@ export default function Profile() {
           
           // ၆. State update လုပ်ခြင်း (UI မှာပြဖို့)
           setLocalProfilePic(base64String);
+
+          // Form data ကိုလည်း update လုပ်ပါ
+          updateFormDataWithProfilePic(base64String);
           
           console.log('Profile picture saved to local storage successfully');
                     
@@ -123,7 +140,6 @@ export default function Profile() {
         return;
       }
       dispatch(updateUserSuccess(data));
-      setUpdateSuccess(true);
       
     } catch (error) {
       console.log("error",error);
@@ -179,7 +195,7 @@ export default function Profile() {
         <img
           alt='profile'
           className='h-24 w-24 self-center cursor-pointer rounded-full object-cover mt-2'
-          src={localProfilePic || currentUser.profilePicture}
+          src={currentUser.profilePicture}
           onClick={() => fileRef.current.click()}
         />
         <input
