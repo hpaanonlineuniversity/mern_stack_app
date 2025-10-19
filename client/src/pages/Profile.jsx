@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'; //redux
 import { useRef, useState, useEffect } from 'react';
-import { updateUserFailure, updateUserSuccess } from '../redux/user/userSlice.js'; //redux
+import { updateUserFailure, signOut, updateUserSuccess } from '../redux/user/userSlice.js'; //redux
 
 
 export default function Profile() {
@@ -110,17 +110,17 @@ export default function Profile() {
 
       const data = await res.json();
       console.log(data);
-      /*
+
       if (data.success === false) {
         dispatch(updateUserFailure(data));
         return;
       }
       dispatch(updateUserSuccess(data));
       setUpdateSuccess(true);
-      */
+      
     } catch (error) {
       console.log("error",error);
-      //dispatch(updateUserFailure(error));
+      dispatch(updateUserFailure(error));
     }
   };
 
@@ -129,6 +129,15 @@ export default function Profile() {
     localStorage.removeItem('profilePicture');
     setLocalProfilePic(null);
     console.log('Profile picture cleared from local storage');
+  };
+
+  const handleSignOut = async () => {
+    try {
+      await fetch(`${API_BASE_URL}/api/auth/signout`);
+      dispatch(signOut());
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -183,7 +192,7 @@ export default function Profile() {
         >
           Delete Account
         </span>
-        <span className='text-red-700 cursor-pointer'>
+        <span onClick={handleSignOut} className='text-red-700 cursor-pointer'>
           Sign out
         </span>
       </div>

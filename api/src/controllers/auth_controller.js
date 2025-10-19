@@ -100,7 +100,9 @@ export const github = async (req, res, next) => {
                     httpOnly: true,
                     path: '/',
                     secure: false,
-                    sameSite: 'none'
+                    sameSite: 'lax',
+                    maxAge: 24 * 60 * 60 * 1000,
+                    domain: 'localhost',
                 })
                 .status(200)
                 .json(rest);
@@ -124,12 +126,15 @@ export const github = async (req, res, next) => {
             const token = jwt.sign({ userId: newUser._id }, JWT_SECRET, { expiresIn: "1h" });
             const { password: hashedPassword2, ...rest } = newUser._doc;
 
+            
             res
                 .cookie('mern_access_token', token, {
                     httpOnly: true,
                     path: '/',
                     secure: false,
-                    sameSite: 'none'
+                    sameSite: 'lax',
+                    maxAge: 24 * 60 * 60 * 1000,
+                    domain: 'localhost',
                 })
                 .status(200)
                 .json(rest);
