@@ -26,14 +26,16 @@ docker compose up -d --build
 ၁။ **Repository clone လုပ်ပါ**
 
 git clone https://github.com/hpaanonlineuniversity/mern_stack_app.git
-cd <project-folder>
+
+
+cd mern_stack_app
 
 
 
 
 
 
-၂။ Environment variables ဖိုင်ဖန်တီးပါ
+၂။ Environment variables ဖိုင်ဖန်တီးပါ 
 
 bash
 cp .env.example .env
@@ -73,7 +75,13 @@ VITE_SUPABASE_KEY=your_supabase_key
 
 
 docker compose up --build
+
+
+
 🌐 Services and Ports
+
+
+
 Application ကို run ပြီးပါက အောက်ပါ services များ အလုပ်လုပ်နေပါမည်:
 
 🔧 Backend API
