@@ -15,15 +15,10 @@ export default function SignUp() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-     const API_BASE_URL = import.meta.env.DEV 
-  ? 'http://localhost:3000'  // Browser ကနေခေါ်ရင်
-  : 'http://backend:3000';    // Docker container ထဲကခေါ်ရင်
-
-
     try {
       setLoading(true);
       setError(false);
-      const res = await fetch(`${API_BASE_URL}/api/auth/register`, {
+      const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

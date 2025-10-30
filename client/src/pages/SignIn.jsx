@@ -27,10 +27,6 @@ export default function SignIn() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-     const API_BASE_URL = import.meta.env.DEV 
-  ? 'http://localhost:3000'  // Browser ကနေခေါ်ရင်
-  : 'http://backend:3000';    // Docker container ထဲကခေါ်ရင်
-
 
     try {
       
@@ -40,7 +36,7 @@ export default function SignIn() {
       dispatch(signInStart()); //redux
 
 
-      const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
+      const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

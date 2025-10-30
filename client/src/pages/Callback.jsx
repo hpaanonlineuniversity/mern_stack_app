@@ -11,10 +11,6 @@ export default function Callback() {
   useEffect(() => {
     const getUser = async () => {
 
-      const API_BASE_URL = import.meta.env.DEV 
-        ? 'http://localhost:3000'  // Browser ကနေခေါ်ရင်
-        : 'http://backend:3000';    // Docker container ထဲကခေါ်ရင်
-
       // Session ရှိမရှိစစ်ဆေးခြင်း
       const { data: { session }, error } = await supabase.auth.getSession();
       
@@ -32,7 +28,7 @@ export default function Callback() {
         //console.log('User Info:', userData);
 
 
-        const res = await fetch(`${API_BASE_URL}/api/auth/github`, {
+        const res = await fetch('/api/auth/github', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

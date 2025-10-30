@@ -12,13 +12,6 @@ import {
 
 export default function Profile() {
 
-
-     const API_BASE_URL = import.meta.env.DEV 
-  ? 'http://localhost:3000'  // Browser ကနေခေါ်ရင်
-  : 'http://backend:3000';    // Docker container ထဲကခေါ်ရင်
-
-
-
   const { currentUser, loading } = useSelector((state) => state.user);
   const [image, setImage] = useState(undefined);
   const [localProfilePic, setLocalProfilePic] = useState(currentUser.profilePicture);
@@ -119,7 +112,7 @@ export default function Profile() {
     e.preventDefault();
     try {
       dispatch(updateUserStart());
-      const res = await fetch(`${API_BASE_URL}/api/user/update/${currentUser._id}`, {
+      const res = await fetch(`/api/user/update/${currentUser._id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -157,7 +150,7 @@ export default function Profile() {
   const handleDeleteAccount = async () => {
     try {
       dispatch(deleteUserStart());
-      const res = await fetch(`${API_BASE_URL}/api/user/delete/${currentUser._id}`, {
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
         method: 'DELETE',
         credentials: 'include',
       });
@@ -174,7 +167,7 @@ export default function Profile() {
 
   const handleSignOut = async () => {
     try {
-      await fetch(`${API_BASE_URL}/api/auth/signout`);
+      await fetch('/api/auth/signout');
       dispatch(signOut());
     } catch (error) {
       console.log(error);
