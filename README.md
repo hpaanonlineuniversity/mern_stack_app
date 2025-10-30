@@ -18,8 +18,8 @@ docker compose up -d --build
 
 
 ၁။ **Repository clone လုပ်ပါ**
-```bash
-git clone <your-repository-url>
+
+git clone https://github.com/hpaanonlineuniversity/mern_stack_app.git
 cd <project-folder>
 
 
@@ -46,7 +46,7 @@ VITE_SUPABASE_KEY=your_supabase_key
 
 ၄။ Application ကို run ပါ
 
-bash
+
 docker compose up --build
 🌐 Services and Ports
 Application ကို run ပြီးပါက အောက်ပါ services များ အလုပ်လုပ်နေပါမည်:
