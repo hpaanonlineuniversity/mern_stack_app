@@ -9,12 +9,18 @@ docker compose up -d --build
 
 ## 🚀 Application Structure
 ├── 📁 api/ - Backend API Server
+
 ├── 📁 client/ - Frontend Application
+
 └── 🐳 docker-compose.yml - Docker Configuration
+
 
 
 ### လိုအပ်သော Software များ
 - Docker
+
+
+
 
 
 ၁။ **Repository clone လုပ်ပါ**
@@ -24,10 +30,17 @@ cd <project-folder>
 
 
 
+
+
+
 ၂။ Environment variables ဖိုင်ဖန်တီးပါ
 
 bash
 cp .env.example .env
+
+
+
+
 
 
 ၃။ Environment variables များကိုဖြည့်ပါ
@@ -49,6 +62,10 @@ JWT_SECRET=your_jwt_secret
 VITE_SUPABASE_URL=your_supabase_url
 
 VITE_SUPABASE_KEY=your_supabase_key
+
+
+
+
 
 
 
