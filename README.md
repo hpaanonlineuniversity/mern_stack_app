@@ -35,13 +35,21 @@ cp .env.example .env
 
 
 MONGO_DBNAME=your_database_name
+
 MONGO_HOST=mongodb
+
 MONGO_PORT=27017
+
 MONGO_USER=your_username
+
 MONGO_PASSWORD=your_password
+
 JWT_SECRET=your_jwt_secret
+
 VITE_SUPABASE_URL=your_supabase_url
+
 VITE_SUPABASE_KEY=your_supabase_key
+
 
 
 ၄။ Application ကို run ပါ
