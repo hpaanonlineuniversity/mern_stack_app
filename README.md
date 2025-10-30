@@ -1,5 +1,14 @@
+
+Quick Run, 
+
 docker compose up -d --build
 
+and check http://localhost:5173
+
+
+Quick Stop,
+
+docker compose down -v
 
 
 # user signup , signin , github login Example
