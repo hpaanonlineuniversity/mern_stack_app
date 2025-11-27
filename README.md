@@ -83,7 +83,7 @@ VITE_SUPABASE_KEY=your_supabase_key
 ၄။ Application ကို run ပါ
 
 
-docker compose up --build
+docker compose up -d --build
 
 
 
