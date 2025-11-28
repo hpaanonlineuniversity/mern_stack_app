@@ -1,4 +1,7 @@
 
+https://www.youtube.com/watch?v=NHvfgMATwqo&list=PLQ-L8lClDz1vfAMmNUvjMWFwfIyIXb7Ym&index=1
+
+
 Quick Run, 
 
 docker compose up -d --build
